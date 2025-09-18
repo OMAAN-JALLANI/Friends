@@ -281,7 +281,7 @@
           </p>
 
           <div class="controls">
-            <button class="btn ghost" id="sendBtn">Forgive Me</button> 
+            <button class="btn ghost" id="forgiveBtn">Forgive Me</button> 
             <button class="btn ghost" id="toggleRainBtn">
               Start Rain 🐼🎋
             </button>
@@ -314,25 +314,30 @@
                   text-align: center;
                 "
               >
-                <img src="images/After-panda.png" alt="panda" id="mainImg" class="panda-img" style="background-: black;" />
+                <img src="images/After-panda.png" alt="panda" id="mainImg" class="panda-img"   />
 
                 <!-- caption overlcoloray -->
                 <div id="txt" class="caption">Please!</div>
               </div>
 <script>
     const img = document.getElementById("mainImg");
-    const btn = document.getElementById("sendBtn");
-    const text = document.getElementById("txt");
+const forgiveBtn = document.getElementById("forgiveBtn");
+const text = document.getElementById("txt");
 
-    btn.addEventListener("click", () => {
-      img.src = "images/Before-panda.png"; // new image ka path
-      text.innerHTML = "Thank you";
-      text.style.background="linear-gradient(50deg, black, pink)";
-      text.style.webkitBackgroundClip="text";
-      text.style.webkitTextFillColor="transparent";
-      
-    });
+forgiveBtn.addEventListener("click", (ev) => {
+  img.src = "images/Before-panda.png";
+  text.innerHTML = "Thank you";
+  text.style.background="linear-gradient(90deg, black, black)";
+  text.style.webkitBackgroundClip="text";
+  text.style.webkitTextFillColor="transparent";
+
+  // Fountain burst call yahan add karo
+  const rect = ev.target.getBoundingClientRect();
+  burst(rect.left + rect.width / 2, rect.top, 50); // 50 emojis fountain
+});
+
   </script>
+  
             </div>
             <div class="overlay" id="overlay"></div>
           </div>
@@ -405,7 +410,7 @@
       let rainOn = false;
       let rainTimer = null;
       let maxFalling = 120; // cap for performance
-      const emojiSet = ["🐼", "🎋", "✨"]; // pandas, bamboo, sparkles
+      const emojiSet = ["🎀    🎊", "🎋    💝     💖", "✨"]; // pandas, bamboo, sparkles
       const globalSpeed = { value: 1.0 };
 
       function createFalling(xPercent = null) {
