@@ -1,634 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sorry Ayesha — Moonlight Panda</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg-1: #030412;
-        --bg-2: #081226;
-        --accent: #ff6b9a;
-        --accent2: #7de3b8;
-        --muted: #b8dcd1;
-        --glass: rgba(255, 255, 255, 0.04);
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        font-family: "Poppins", system-ui, Segoe UI, Roboto, Helvetica, Arial;
-        -webkit-font-smoothing: antialiased;
-      }
-      body {
-        background: radial-gradient(
-            600px 400px at 10% 15%,
-            rgba(125, 227, 184, 0.03),
-            transparent 12%
-          ),
-          linear-gradient(180deg, var(--bg-1), var(--bg-2));
-        color: #fff;
-        overflow: hidden;
-      }
+<head>
+  <meta charset="UTF-8">
+  <title>Stylish Panda Slider</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7, #f6fba2, #a1ffce);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      position: relative;
+    }
 
-      /* Stage */
-      .stage {
-        position: relative;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 28px;
-      }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-      /* Card center */
-      .card {
-        width: min(980px, 94vw);
-        border-radius: 20px;
-        padding: 22px;
-        display: grid;
-        grid-template-columns: 1fr 360px;
-        gap: 20px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.02),
-          rgba(255, 255, 255, 0.01)
-        );
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(8px);
-      }
+    h1 {
+      color: black;
+      text-shadow: 2px 2px 5px rgba(255,255,255,0.8);
+      margin-bottom: 15px;
+      z-index: 10;
+    }
 
-      .left {
-        padding: 16px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        justify-content: center;
-      }
-      .eyebrow {
-        font-size: 12px;
-        color: var(--muted);
-        font-weight: 700;
-        letter-spacing: 4px;
-      }
-      h1 {
-        font-size: clamp(26px, 4.8vw, 44px);
-        margin: 0;
-        line-height: 1;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        color: transparent;
-        font-weight: 800;
-      }
-      .lead {
-        color: var(--muted);
-        max-width: 60ch;
-      }
+    img {
+      max-width: 320px;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
 
-      .controls {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-top: 8px;
-        flex-wrap: wrap;
-      }
-      .btn {
-        padding: 10px 14px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 700;
-        border: 0;
-      }
-      .btn.primary {
-        background: linear-gradient(90deg, var(--accent), );
-        color: #1b0620;
-      }
-      .btn.ghost {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        color: var(--muted);
-      }
+    img:hover {
+      transform: scale(1.05);
+    }
 
-      .small {
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 6px;
+    .btn {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, background 0.3s ease;
+      z-index: 10;
+      position: relative;
+    }
+
+    .btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(to right, #ff7eb3, #ff758c);
+    }
+
+    .emoji {
+      position: absolute;
+      top: -50px;
+      font-size: 28px;
+      animation: fall linear;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
       }
+    }
+  </style>
+</head>
+<body>
 
-      /* right panel - panda + sky */
-      .right {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-      }
-      .sky {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 380px;
-        border-radius: 12px;
-        overflow: hidden;
-        background: linear-gradient(180deg, #041222, #021018);
-      }
-      .stars-canvas {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-      }
-      .overlay {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 3;
-      }
+  <h1>🌸 My Pretty litle Baby🌸</h1>
+  <img id="slider" src="images/image1.jpg" alt="Panda Image">
+  <button class="btn" onclick="nextImage()">Next Image</button>
 
-      /* central panda */
-      .center-panda {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding-top: 10px;
-      }
-      .panda-img {
-        width: 220px;
-        height: 220px;
-        object-fit: contain;
-        filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
-        transition: transform 0.35s ease;
-      }
-      .panda-caption {
-        margin-top: 6px;
-        color: var(--muted);
-        font-size: 14px;
-        text-align: center;
-      }
+  <script>
+    // Image Slider Logic
+    const images = [
+      "/images/image1.jpg",
+      "/images/image2.jpg",
+      "/images/image3.jpg",
+      "/images/image4.jpg",
+      "/images/image5.jpg"
+    ];
 
-      /* overlay emojis falling/rain items */
-      .falling {
-        position: fixed;
-        pointer-events: none;
-        z-index: 4;
-        will-change: transform, opacity;
-      }
+    let index = 0;
 
-      /* animation defined with CSS variables for duration and drift */
-      @keyframes fallDown {
-        0% {
-          transform: translateY(-10vh) translateX(0) rotate(0deg);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(110vh) translateX(var(--drift, 20px))
-            rotate(360deg);
-          opacity: 0.95;
-        }
-      }
+    function nextImage() {
+      index = (index + 1) % images.length; 
+      document.getElementById("slider").src = images[index];
+    }
 
-      /* cheesy glow when forgiven */
-      .glow {
-        box-shadow: 0 0 60px rgba(255, 110, 150, 0.22),
-          inset 0 0 30px rgba(125, 227, 184, 0.05);
-        transform: scale(1.03);
-      }
+    // Emoji Rain Logic
+    const emojis = ["🐼", "🎋", "💕  🌸", "💖   💕  🌸", "💓   ✨", " 💕  🌸    🍃"];
 
-      /* small UI */
-      .footer-ui {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        justify-content: flex-end;
-        color: var(--muted);
-        font-size: 13px;
-        margin-top: 6px;
-      }
+    function createEmoji() {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = 3 + Math.random() * 4 + "s";
+      emoji.style.fontSize = 20 + Math.random() * 20 + "px";
+      document.body.appendChild(emoji);
 
-      /* responsive */
-      @media (max-width: 960px) {
-        .card {
-          grid-template-columns: 1fr;
-          padding: 16px;
-        }
-        .panda-img {
-          width: 160px;
-          height: 160px;
-        }
-        .right {
-          order: -1;
-        }
-      }
-      .panda-img {
-        border-radius: 12px;
-        max-width: 100%;
-        height: auto;
-        width: 400px; /* laptop ke liye default */
-      }
+      setTimeout(() => {
+        emoji.remove();
+      }, 7000);
+    }
 
-      .caption {
-        color: #1b0620;
-        position: absolute;
-        top: 64%;
-        left: 49%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        z-index: 4;
-        font-weight: 1000;
-        background: linear-gradient(50deg, #ff9ab4, #9a9a9b);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 35px;
-        width: 60%;
-      }
-
-      /* Mobile view ke liye adjustments */
-      @media (max-width: 600px) {
-        .panda-img {
-          border-radius: 12px;
-          width: 250px; /* chhota ho jaye mobile pe */
-        }
-
-        .caption {
-          font-size: 14px;
-          width: 60%;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="stage">
-      <div class="card" role="main" aria-label="Apology Panda Page">
-        <div class="left">
-          <div class="eyebrow">FOR AYESHA</div>
-          <h1>Sorry na — Mari Moonlight</h1>
-          <p class="lead">
-            Chal na please mara pyara dost... man ja na ab.. kb sy mu phula kr
-            batha rhy ga 🙂
-          </p>
-
-          <div class="controls">
-            <button class="btn ghost" id="forgiveBtn">Forgive Me</button> 
-            <button class="btn ghost" id="toggleRainBtn">
-              Start Rain 🐼🎋
-            </button>
-            
-          </div>
-
-          <div class="small">
-            Tip: Press <strong>H</strong> for a big panda shower;
-            <strong>R</strong> to replay typing.
-          </div>
-          <div class="footer-ui"><div id="nowTime">--:--:--</div></div>
-        </div>
-
-        <div class="right">
-          <div class="sky" id="sky">
-            <canvas
-              class="stars-canvas"
-              id="starsCanvas"
-              aria-hidden="true"
-            ></canvas>
-
-            <!-- central panda (use the inline SVG we made earlier for crisp transparency) -->
-            <div class="center-panda" id="centerPanda">
-              <!-- Inline simple cute panda SVG -->
-              <div
-
-                style="
-                  position: relative;
-                  display: inline-block;
-                  text-align: center;
-                "
-              >
-                <img src="images/After-panda.png" alt="panda" id="mainImg" class="panda-img"   />
-
-                <!-- caption overlcoloray -->
-                <div id="txt" class="caption">Please!</div>
-              </div>
-<script>
-    const img = document.getElementById("mainImg");
-const forgiveBtn = document.getElementById("forgiveBtn");
-const text = document.getElementById("txt");
-
-forgiveBtn.addEventListener("click", (ev) => {
-  img.src = "images/Before-panda.png";
-  text.innerHTML = "Thank you";
-  text.style.background="linear-gradient(90deg, black, black)";
-  text.style.webkitBackgroundClip="text";
-  text.style.webkitTextFillColor="transparent";
-
-  // Fountain burst call yahan add karo
-  const rect = ev.target.getBoundingClientRect();
-  burst(rect.left + rect.width / 2, rect.top, 50); // 50 emojis fountain
-});
-
+    setInterval(createEmoji, 300);
   </script>
-  
-            </div>
-            <div class="overlay" id="overlay"></div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <script>
-      /* ========= clock ========= */
-      const nowTime = document.getElementById("nowTime");
-      function pad(n) {
-        return String(n).padStart(2, "0");
-      }
-      function tickClock() {
-        const d = new Date();
-        nowTime.textContent = `${pad(d.getHours())}:${pad(
-          d.getMinutes()
-        )}:${pad(d.getSeconds())}`;
-        setTimeout(tickClock, 500);
-      }
-      tickClock();
-
-      /* ====== stars canvas (gentle twinkle) ====== */
-      const starsCanvas = document.getElementById("starsCanvas");
-      const sctx = starsCanvas.getContext("2d");
-      function resizeStars() {
-        starsCanvas.width = starsCanvas.clientWidth;
-        starsCanvas.height = starsCanvas.clientHeight;
-        initStars();
-      }
-      window.addEventListener("resize", resizeStars);
-
-      let stars = [];
-      function initStars() {
-        stars = [];
-        const count = Math.round(
-          (starsCanvas.width * starsCanvas.height) / 9000
-        );
-        for (let i = 0; i < count; i++) {
-          stars.push({
-            x: Math.random() * starsCanvas.width,
-            y: Math.random() * starsCanvas.height,
-            r: Math.random() * 1.6 + 0.4,
-            tw: Math.random() * 2.2,
-            drift: Math.random() * 0.6 - 0.3,
-          });
-        }
-      }
-      function drawStars() {
-        sctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-        for (const st of stars) {
-          const a = 0.45 + Math.sin(Date.now() * 0.001 * st.tw) * 0.45;
-          sctx.fillStyle = `rgba(255,255,255,${a})`;
-          sctx.beginPath();
-          sctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
-          sctx.fill();
-          st.x += st.drift * 0.2;
-          st.y += 0.02;
-          if (st.y > starsCanvas.height) st.y = -10;
-          if (st.x > starsCanvas.width) st.x = 0;
-          if (st.x < 0) st.x = starsCanvas.width;
-        }
-        requestAnimationFrame(drawStars);
-      }
-      resizeStars();
-      drawStars();
-
-      /* ====== rain/falling system (pandas and bamboo) ====== */
-      const overlay = document.getElementById("overlay");
-      let rainOn = false;
-      let rainTimer = null;
-      let maxFalling = 120; // cap for performance
-      const emojiSet = ["🎀    🎊", "🎋    💝     💖", "✨"]; // pandas, bamboo, sparkles
-      const globalSpeed = { value: 1.0 };
-
-      function createFalling(xPercent = null) {
-        // return early if too many elements
-        const current = document.querySelectorAll(".falling").length;
-        if (current >= maxFalling) return;
-
-        const el = document.createElement("div");
-        el.className = "falling";
-        const size = Math.random() * 28 + 20; // px font-size for emojis
-        el.style.fontSize = size + "px";
-        // position
-        const left = xPercent === null ? Math.random() * 100 : xPercent;
-        el.style.left = left + "vw";
-        el.style.top = -8 - Math.random() * 6 + "vh";
-        el.style.opacity = 0.95;
-
-        // pick emoji
-        el.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
-
-        // random horizontal drift
-        const drift = Math.random() * 30 - 15; // pixels
-        el.style.setProperty("--drift", drift + "px");
-
-        // duration scaled by global speed (larger value => slower)
-        const baseDur = 9 + Math.random() * 8; // seconds
-        const dur = baseDur / globalSpeed.value; // faster speed -> smaller divisor? we invert
-        el.style.animation = `fallDown ${dur}s linear forwards`;
-        el.style.willChange = "transform, opacity";
-
-        overlay.appendChild(el);
-        // remove after animation ends
-        setTimeout(() => {
-          if (el && el.parentNode) el.parentNode.removeChild(el);
-        }, dur * 1000 + 400);
-      }
-
-      function startRain() {
-        if (rainOn) return;
-        rainOn = true;
-        // spawn rapidly but keep within maxFalling
-        rainTimer = setInterval(() => {
-          // spawn 1-3 per tick
-          const count = Math.random() < 0.6 ? 1 : 2;
-          for (let i = 0; i < count; i++) createFalling();
-        }, 220);
-        document.getElementById("toggleRainBtn").textContent = "Stop Rain 🌧";
-      }
-
-      function stopRain() {
-        rainOn = false;
-        clearInterval(rainTimer);
-        rainTimer = null;
-        document.getElementById("toggleRainBtn").textContent =
-          "Start Rain 🐼🎋";
-      }
-
-      // toggle button
-      document.getElementById("toggleRainBtn").addEventListener("click", () => {
-        if (rainOn) stopRain();
-        else startRain();
-      });
-
-      // hotkey H = big shower
-      window.addEventListener("keydown", (e) => {
-        if (e.key.toLowerCase() === "h") {
-          // big shower
-          for (let i = 0; i < 80; i++) {
-            setTimeout(() => createFalling(Math.random() * 100), i * 8);
-          }
-        }
-      });
-
-      // speed control
-      const speedRange = document.getElementById("speedRange");
-      speedRange.addEventListener("input", (e) => {
-        // speedRange value from 0.4 .. 3.0, smaller => faster, larger => slower feel
-        globalSpeed.value = parseFloat(e.target.value);
-      });
-
-      // ===== bursts (for buttons) =====
-      function burst(x, y, count = 26) {
-        for (let i = 0; i < count; i++) {
-          const el = document.createElement("div");
-          el.className = "falling";
-          const size = 18 + Math.random() * 36;
-          el.style.fontSize = size + "px";
-          el.style.left = x + (Math.random() * 140 - 70) + "px";
-          el.style.top = y + (Math.random() * 40 - 20) + "px";
-          el.style.opacity = 1;
-          el.textContent =
-            emojiSet[Math.floor(Math.random() * emojiSet.length)];
-          const dur = (2.0 + Math.random() * 2.5) / (globalSpeed.value * 0.7);
-          // upward burst then drift up
-          el.animate(
-            [
-              { transform: "translateY(0) scale(.8)", opacity: 1 },
-              {
-                transform: `translateY(${-(
-                  120 +
-                  Math.random() * 200
-                )}px) translateX(${Math.random() * 60 - 30}px) scale(1)`,
-                opacity: 0.95,
-              },
-              {
-                transform: `translateY(${-(
-                  220 +
-                  Math.random() * 380
-                )}px) translateX(${Math.random() * 80 - 40}px) scale(1.05)`,
-                opacity: 0,
-              },
-            ],
-            { duration: dur * 1000, easing: "cubic-bezier(.2,.8,.2,1)" }
-          );
-          overlay.appendChild(el);
-          setTimeout(() => el.remove(), dur * 1000 + 60);
-        }
-      }
-
-      // Send Love
-      document.getElementById("sendBtn").addEventListener("click", (ev) => {
-        const rect = ev.target.getBoundingClientRect();
-        burst(rect.left + rect.width / 2, rect.top - 20, 20);
-        // small panda pulse
-        const panda = document
-          .getElementById("centerPanda")
-          .querySelector(".panda-img");
-        panda.animate(
-          [
-            { transform: "scale(1)" },
-            { transform: "scale(1.06)" },
-            { transform: "scale(1)" },
-          ],
-          { duration: 560 }
-        );
-      });
-
-      // Forgive: big burst + glow
-      document.getElementById("forgiveBtn").addEventListener("click", (ev) => {
-        const rect = ev.target.getBoundingClientRect();
-        burst(rect.left + rect.width / 2, rect.top - 20, 44);
-        // panda glow and gentle pulse
-        const pandaWrap = document.getElementById("centerPanda");
-        pandaWrap.classList.add("glow");
-        setTimeout(() => pandaWrap.classList.remove("glow"), 1400);
-
-        // also temporarily start a gentle rain of pandas to celebrate
-        for (let i = 0; i < 40; i++)
-          setTimeout(() => createFalling(Math.random() * 100), i * 80);
-      });
-
-      // Keyboard R to replay typing
-      window.addEventListener("keydown", (e) => {
-        if (e.key.toLowerCase() === "r") {
-          // restart typewriter
-          li = 0;
-          ci = 0;
-          typing = true;
-          typeLoop();
-        }
-      });
-
-      /* ===== typewriter (same as before) ===== */
-      const lines = [
-        "I was wrong, and I'm sorry.",
-        "You are my moonlight — please don't go.",
-        "I'll listen and I'll change.",
-        "Please give me another chance.",
-      ];
-      const typeBox = document.getElementById("typeBox");
-      let li = 0,
-        ci = 0,
-        typing = true;
-      function typeLoop() {
-        const cur = lines[li];
-        if (typing) {
-          typeBox.innerHTML =
-            cur.slice(0, ci++) + '<span class="caret"></span>';
-          if (ci > cur.length) {
-            typing = false;
-            setTimeout(typeLoop, 1200);
-            return;
-          }
-          setTimeout(typeLoop, 36);
-        } else {
-          typeBox.innerHTML =
-            cur.slice(0, ci--) + '<span class="caret"></span>';
-          if (ci <= 0) {
-            typing = true;
-            li = (li + 1) % lines.length;
-            setTimeout(typeLoop, 520);
-            return;
-          }
-          setTimeout(typeLoop, 18);
-        }
-      }
-      typeLoop();
-
-      /* Respect reduced motion */
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        document
-          .querySelectorAll(".falling")
-          .forEach((e) => (e.style.animation = "none"));
-        document
-          .querySelectorAll("svg")
-          .forEach((e) => (e.style.transition = "none"));
-      }
-
-      /* Cleanup: remove extra elements occasionally to avoid buildup */
-      setInterval(() => {
-        const nodes = document.querySelectorAll(".falling");
-        if (nodes.length > maxFalling * 1.2) {
-          for (let i = 0; i < Math.floor(nodes.length - maxFalling); i++) {
-            if (nodes[i] && nodes[i].parentNode)
-              nodes[i].parentNode.removeChild(nodes[i]);
-          }
-        }
-      }, 4000);
-    </script>
-  </body>
+</body>
 </html>
