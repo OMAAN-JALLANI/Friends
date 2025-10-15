@@ -3,440 +3,445 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>  💖</title>
+<title>Sorry — My Moonlight</title>
 <style>
   :root{
-    --bg1: #fff0f6;
-    --bg2: #ffeef8;
-    --accent1: #ff7eb3;
-    --accent2: #ffa6c9;
-    --card: rgba(255,255,255,0.95);
-    --muted: #4b4250;
-    --btn-grad: linear-gradient(90deg,var(--accent1),var(--accent2));
+    --bg-a:#fff6f9; --bg-b:#fff1e8;
+    --accent-1:#ff7eb3; --accent-2:#ffb6d5;
+    --muted:#4b4250;
+    --card: rgba(255,255,255,0.96);
   }
   *{box-sizing:border-box}
-  html,body{height:100%; margin:0; font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  html,body{height:100%; margin:0; font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
   body{
+    background: linear-gradient(120deg,var(--bg-a),var(--bg-b));
     display:flex; align-items:center; justify-content:center;
-    background: linear-gradient(120deg,var(--bg1),#ffe6f0 40%, #fff8e6);
-    overflow:hidden;
-    padding:20px;
+    padding:18px; overflow:hidden;
   }
 
-  /* common card */
   .stage {
-    width:100%;
-    max-width:980px;
-    min-height:520px;
-    border-radius:20px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.95));
-    box-shadow: 0 20px 60px rgba(120,30,80,0.12);
-    padding:20px;
-    position:relative;
+    width:100%; max-width:980px; min-height:560px; border-radius:18px;
+    position:relative; overflow:hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,250,250,0.95));
+    box-shadow: 0 30px 80px rgba(120,20,60,0.08);
+    display:flex; flex-direction:column; align-items:center; gap:14px; padding:22px;
   }
 
-  .center-wrap { display:flex; flex-direction:column; align-items:center; gap:14px; padding:18px; }
+  /* raindrops canvas sits behind content */
+  #rainCanvas { position:absolute; inset:0; z-index:1; pointer-events:none; }
 
-  h1 {
-    margin:0; font-size:28px; letter-spacing:0.2px; color:#b12f6b;
-    background: linear-gradient(90deg,#ff6b9a,#ffb1c8); -webkit-background-clip:text; color:transparent;
-  }
+  .content { position:relative; z-index:10; width:100%; display:flex; flex-direction:column; align-items:center; gap:12px; }
 
-  .sms-card {
-    width:100%; max-width:640px; background:var(--card); padding:18px; border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,0.06);
-    color:var(--muted); text-align:left;
-  }
-  .sms-card p { margin:6px 0; font-size:16px; line-height:1.45; }
+  h1 { margin:0; font-size:30px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); -webkit-background-clip:text; color:transparent; font-weight:800; letter-spacing:.6px; text-align:center; }
 
-  .btn {
-    appearance:none; border:0; padding:12px 20px; border-radius:999px; cursor:pointer; font-weight:700;
-    color:white; background:var(--btn-grad); box-shadow:0 10px 30px rgba(255,105,150,0.12);
-  }
-  .btn.ghost { background:transparent; color:var(--muted); border:1px solid rgba(0,0,0,0.06); }
+  /* typewriter card */
+  .sms-card { width:100%; max-width:720px; background:var(--card); padding:18px; border-radius:14px; color:var(--muted); box-shadow:0 10px 30px rgba(0,0,0,0.06); text-align:left; }
+  .sms-card p{margin:6px 0; font-size:15px; line-height:1.45}
 
-  /* balloons layout */
-  #balloonStage {
-    width:100%; min-height:320px; display:flex; align-items:center; justify-content:center; position:relative;
-  }
-  .balloon {
-    width:86px; height:112px; border-radius:60% 60% 50% 50%;
-    display:flex; align-items:center; justify-content:center;
-    position:absolute; cursor:pointer; transition:transform .18s ease, opacity .2s ease;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  .controls { display:flex; gap:12px; align-items:center; margin-top:6px; }
+
+  .btn { padding:12px 20px; border-radius:999px; border:0; cursor:pointer; font-weight:700; color:#fff;
+        background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); box-shadow:0 14px 36px rgba(255,90,150,0.12); }
+
+  .btn.ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--muted); box-shadow:none; }
+
+  /* balloon/rose stage */
+  #balloonStage { width:100%; min-height:320px; position:relative; display:flex; align-items:center; justify-content:center; z-index:8; }
+
+  .rose {
+    width:84px; height:100px; border-radius:50% 50% 46% 46%;
+    display:flex; align-items:center; justify-content:center; position:absolute; cursor:pointer;
+    transition: transform .18s ease, opacity .2s ease; box-shadow:0 8px 26px rgba(0,0,0,0.12);
     user-select:none;
   }
-  .balloon .pin {
-    position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:18px; pointer-events:auto;
-  }
-  .balloon .string {
-    position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); width:2px; height:26px; background:rgba(0,0,0,0.12);
-  }
+  .rose .pin { position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-size:18px; cursor:pointer; }
+  .rose .string { position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); width:2px; height:22px; background: rgba(0,0,0,0.12); }
 
-  .balloon-pop {
-    animation: popAnim .45s ease forwards;
-  }
-  @keyframes popAnim {
-    0% { transform: scale(1); opacity:1; }
-    60% { transform: scale(1.35) rotate(8deg); opacity:1; }
-    100% { transform: scale(0); opacity:0; }
-  }
+  .rose-pop { animation: popR .45s ease forwards; }
+  @keyframes popR { 0%{transform:scale(1);opacity:1}60%{transform:scale(1.4) rotate(6deg)}100%{transform:scale(0);opacity:0} }
 
-  .message-box {
-    margin-top:14px; width:100%; max-width:640px; background:#fff; border-radius:12px; padding:12px; color:var(--muted);
-    box-shadow:0 8px 20px rgba(0,0,0,0.06);
-    min-height:54px; display:flex; align-items:center; justify-content:center; font-size:16px;
-  }
+  .message-box { width:100%; max-width:720px; background:#fff; padding:12px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.06); min-height:56px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:16px; z-index:9; }
 
   /* video overlay */
-  #videoOverlay {
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6);
-    z-index:60; padding:20px; visibility:hidden; opacity:0; transition:opacity .28s ease, visibility .28s;
-  }
+  #videoOverlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:60; visibility:hidden; opacity:0; transition:opacity .25s ease, visibility .25s; }
   #videoOverlay.active { visibility:visible; opacity:1; }
+  #videoOverlay video { max-width:92%; border-radius:12px; box-shadow:0 30px 80px rgba(0,0,0,0.6); }
 
-  #videoOverlay video { max-width:90%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  /* cartoon + dialog */
+  .cartoon { width:220px; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,0.12); }
+  .dialog { margin-top:12px; background:linear-gradient(180deg,#fff,#fff4f8); padding:14px; border-radius:12px; max-width:720px; text-align:center; color:var(--muted); box-shadow:0 10px 30px rgba(0,0,0,0.06); }
 
-  /* final cartoon + dialog */
-  .cartoon { width:220px; height:auto; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,0.12); }
-  .dialog { margin-top:12px; background:linear-gradient(180deg,#fff,#fff0f6); padding:14px; border-radius:12px; max-width:640px; color:var(--muted); box-shadow:0 8px 30px rgba(0,0,0,0.06); text-align:center; }
+  /* final screen */
+  .final-card { text-align:center; }
 
-  /* emoji rain (absolute layer) */
-  #emojiLayer { position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+  /* emoji rain layer */
+  #emojiLayer { position:absolute; inset:0; z-index:6; pointer-events:none; overflow:hidden; }
 
-  /* responsive */
-  @media (max-width:740px){
-    .stage { padding:14px; min-height:640px; }
-    .balloon { width:64px; height:84px; }
-    .cartoon { width:160px; }
-    h1 { font-size:22px; }
+  @media(max-width:760px){
+    .stage{ padding:14px }
+    h1{ font-size:20px }
+    .cartoon{ width:160px }
+    .rose{ width:62px; height:78px }
   }
 </style>
 </head>
 <body>
   <div class="stage" id="stageRoot">
-    <div class="center-wrap" id="step1">
-      <h1>My sweet Ayesha 💖</h1>
+    <canvas id="rainCanvas"></canvas>
+    <div id="emojiLayer" aria-hidden="true"></div>
+
+    <!-- Step 1: intro -->
+    <div class="content" id="step1">
+      <h1>My Moonlight — I'm Sorry</h1>
       <div class="sms-card">
-        <!-- 5–6 lines; change these strings below in JS if you want -->
-        <p id="introLine1"><strong>Oyeee 🥺 —</strong> Really SOrry na yrr</p>
-        <p id="introLine2">Mary dunyia ka sb sy IMPORTANT person hn na tu yr 🎗🙂</p>
+        <p id="introLine1"><strong>Baby Girl 🥺 —</strong> SOrry na yrr</p>
+        <p id="introLine2">sb sy zada IMPORTANCE, PRIOTYp k lyia hn na.. 🎗🙂</p>
         <p id="introLine3">maff kr do na... cutiee pieee please ☹💝</p>
         <p id="introLine4">Nhi milta na sukoon, apna dil to hurt kr ka ☹🥀</p>
         <p id="introLine5">Press below and let me try to show you how sorry I am.</p>
       </div>
-      <button class="btn" id="startBtn">Continue Apologize ?</button>
+
+      <div style="display:flex; gap:12px; align-items:center; margin-top:8px;">
+        <button class="btn" id="startBtn">Continue Apologize ?</button>
+        <button class="btn ghost" id="muteBtn">🔈</button>
+      </div>
     </div>
 
-    <!-- Step 2: Balloons -->
-    <div class="center-wrap hidden" id="step2" style="display:none;">
-      <h1>Pop balloons for little apologies 🎈</h1>
+    <!-- Step 2: roses -->
+    <div class="content" id="step2" style="display:none;">
+      <h1>mara sir smajh kr.. phor do in balloons ko🙂</h1>
       <div id="balloonStage" aria-live="polite"></div>
-      <div class="message-box" id="balloonMsg">Pop balloons to read messages My Queen ✨🎀🙂</div>
-      <div style="margin-top:12px;"><button class="btn ghost" id="skipToVideoBtn">Skip to video</button></div>
+      <div class="message-box" id="balloonMsg">mara sir smajh kr.. phor do in balloons ko🙂</div>
+      <div style="margin-top:10px;"><button class="btn ghost" id="skipToVideoBtn">Skip to video</button></div>
     </div>
 
-    <!-- Video overlay (Step 3) -->
-    <div id="videoOverlay" role="dialog" aria-hidden="true">
-      <div style="width:100%; max-width:880px;">
-        <video id="sorryVideo" src="./Components/sorry_video.webm" controls playsinline ></video>
-        <div style="display:flex; gap:10px; justify-content:center; align-items: center; margin-top:12px;">
+    <!-- Video overlay -->
+    <div id="videoOverlay" aria-hidden="true">
+      <div style="width:100%; max-width:980px;">
+        <video id="sorryVideo" src="./Components/sorry_video.webm" controls playsinline></video>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:12px;">
           <button class="btn" id="continueAfterVideo">Continue</button>
           <button class="btn ghost" id="closeVideo">Close Video</button>
         </div>
       </div>
     </div>
 
-    <!-- Step 4: Cartoon + dialog -->
-    <div class="center-wrap hidden" id="step4" style="display:none;">
+    <!-- Step 3: cartoon dialog -->
+    <div class="content" id="step4" style="display:none;">
       <img id="cartoonImg" class="cartoon" src="./Components/image3.webp" alt="cartoon">
       <div class="dialog" id="dialogBox">Click below to read my message 💬</div>
       <div style="margin-top:12px;"><button class="btn" id="dialogNextBtn">Show Next</button></div>
     </div>
 
-    <!-- Step 5: Final message -->
-    <div class="center-wrap hidden" id="step5" style="display:none;">
+    <!-- Step 4: final -->
+    <div class="content" id="step5" style="display:none;">
       <h1>💞 I’m Sachi Maffi 🙂</h1>
-      <div class="sms-card" style="text-align:center;">
-        <p id="finalLine">Galti to insano sy hoti hn na.... is lyia mj ys galti hwe... ap sy nhi ho skti Q k ap to angel✨🙂 na, PLEASE MQ QUEEN ✨🎀🙂   <br>    Mistake Was taken form people, me is insan (MONKEY 🙂) this is why me done a mistake, she were a angle 🙂🙂 you can't create a mistake, Kasam sy 😅 </p>
+      <div class="sms-card final-card">
+        <p id="finalLine">Galti to insano sy hoti hn na.... is lyia mj ys galti hwe... ap sy nhi ho skti Q k ap to angel✨🙂 na, PLEASE PYALA WLA BABY✨🎀🙂
+          <br> Galti sy Galti kr de mein na.. Monkey jo hu... 😁Ab nhi kro ga na asy.. First or last time tha.. na.. kasam sy na... ap ko to pta hn na mara..My Queen 💖🎀🙂</p>
       </div>
       <div style="margin-top:12px;"><button class="btn" id="restartBtn">Again Experience</button></div>
     </div>
 
-    <!-- emoji rain layer -->
-    <div id="emojiLayer" aria-hidden="true"></div>
-
-    <!-- audio (place file 'music.mp3' in same folder) -->
-   <audio id="bgMusic" src="./Components/song.mp3" preload="auto"></audio>
-
-<script>
-const audio = document.getElementById("bgMusic");
-const startTime = 128; // 2:08
-const endTime = 355;   // 5:55
-
-document.body.addEventListener("click", () => {
-  audio.currentTime = startTime;
-  audio.play();
-
-  const stopCheck = setInterval(() => {
-    if (audio.currentTime >= endTime) {
-      audio.pause();
-      clearInterval(stopCheck);
-    }
-  }, 300);
-}, { once: true });
-</script>
-
- <!-- pop sound -->
+    <!-- audio elements -->
+    <audio id="bgMusic" src="./Components/song.mp3" preload="auto"></audio>
     <audio id="popSound" src="pop.mp3" preload="auto"></audio>
+
   </div>
 
 <script>
-/* -------------------------
-   Configuration / content
-   ------------------------- */
-const balloonMessages = [
-  "I know... mein   Hurt kia hn ap ko 🌸",
-  "  maaf kar do na, main Dance kr ka dakio ga phr 🙂",
-  "mein ap k lyia posceesive ho na.. is lyia BS💗",
-  "Ap ke smile... mari smile hn Sweet Heart🙂🎀",
+/* ---------------- CONFIG / TEXTS ---------------- */
+const roseMessages = [
+  "I know... mein hurt krta ho ap ko 🌸",
+  "Maaf kar do na, main dance or song or loori be sunio ga 🙂",
+  "Mein bs acting kr r tha na... lakin wo glat ho gyia 🥺 💗",
+  "Ya phool murjha jya ga... yr ap k bina 🙂🎀",
   "Give me one chance to prove I'll change 💖",
-  "I Care about... you more than words 🐼"
+  "Ap jitna marzi rok lo... mein phr be manio ga ap ko 🙂",
 ];
 
 const finalDialogues = [
   "Mari pyari se Moon Light✨😊",
-  "Insan sy he galti hoti hn na...Sweet Heart🥺",
-  "You are always Right na, am wrong, Cutieee pieee 💝",
+  "ho gyee na galtii...Sweet Heart🥺",
+  " Promise na ab nhi kro ga naa janaaa 💝",
   "Please let me make it up to you 💝, My Queen"
 ];
 
-// DOM refs
-const startBtn = document.getElementById('startBtn');
+/* -------------- elements -------------- */
 const step1 = document.getElementById('step1');
+const startBtn = document.getElementById('startBtn');
+const muteBtn = document.getElementById('muteBtn');
 const step2 = document.getElementById('step2');
 const balloonStage = document.getElementById('balloonStage');
 const balloonMsg = document.getElementById('balloonMsg');
+const skipToVideoBtn = document.getElementById('skipToVideoBtn');
 const videoOverlay = document.getElementById('videoOverlay');
 const sorryVideo = document.getElementById('sorryVideo');
-const continueAfterVideo = document.getElementById('continueAfterVideo');
 const closeVideo = document.getElementById('closeVideo');
+const continueAfterVideo = document.getElementById('continueAfterVideo');
 const step4 = document.getElementById('step4');
 const dialogBox = document.getElementById('dialogBox');
 const dialogNextBtn = document.getElementById('dialogNextBtn');
 const step5 = document.getElementById('step5');
 const restartBtn = document.getElementById('restartBtn');
-const skipToVideoBtn = document.getElementById('skipToVideoBtn');
 
+const emojiLayer = document.getElementById('emojiLayer');
 const bgMusic = document.getElementById('bgMusic');
 const popSound = document.getElementById('popSound');
-const emojiLayer = document.getElementById('emojiLayer');
 
-/* -------------------------
-   Helpers
-   ------------------------- */
-function $(s){ return document.querySelector(s); }
-function show(el){ el.style.display='flex'; el.style.visibility='visible'; el.style.opacity='1'; }
-function hide(el){ el.style.display='none'; }
+/* -------------- music timing -------------- */
+const startTime = 128; // 2:08
+const endTime = 355;   // 5:55
+let musicInterval;
+let musicPlaying = false;
+let userInteracted = false;
 
-/* --------------
-   Emoji rain
-   -------------- */
-const rainEmojis = ["💖","💕","🌸","✨   🎗","✨","🎋   🎀"];
-function createEmoji() {
+/* -------------- raindrops canvas -------------- */
+const canvas = document.getElementById('rainCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  canvas.width = canvas.clientWidth || canvas.offsetWidth;
+  canvas.height = canvas.clientHeight || canvas.offsetHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+let drops = [];
+function makeDrops(){
+  drops = [];
+  const density = Math.round((canvas.width * canvas.height) / 70000);
+  for(let i=0;i<Math.max(12,density);i++){
+    drops.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      l: 8 + Math.random()*18,
+      xs: -0.5 + Math.random()*1,
+      ys: 1 + Math.random()*3,
+      a: 0.2 + Math.random()*0.7
+    });
+  }
+}
+makeDrops();
+
+function drawDrops(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const d of drops){
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(255,255,255,${d.a})`;
+    ctx.lineWidth = 1.4;
+    ctx.moveTo(d.x, d.y);
+    ctx.lineTo(d.x + d.xs * d.l, d.y + d.ys * d.l);
+    ctx.stroke();
+
+    d.x += d.xs;
+    d.y += d.ys;
+    if(d.y > canvas.height + 20){ d.y = -20; d.x = Math.random()*canvas.width; }
+    if(d.x > canvas.width + 20) d.x = -10;
+    if(d.x < -20) d.x = canvas.width + 10;
+  }
+  requestAnimationFrame(drawDrops);
+}
+drawDrops();
+
+/* -------------- emoji rain (soft) -------------- */
+const rainEmojis = ["💖","🌸","✨","💞","🎋","🐼"];
+function createEmoji(){
   const el = document.createElement('div');
-  el.style.position = 'absolute';
-  el.style.top = '-6vh';
+  el.style.position='absolute';
   el.style.left = (Math.random()*92 + 2) + 'vw';
-  el.style.fontSize = (14 + Math.random()*28) + 'px';
-  el.style.opacity = (0.7 + Math.random()*0.3);
-  el.style.transform = `rotate(${Math.random()*40-20}deg)`;
-  el.style.pointerEvents = 'none';
+  el.style.top = '-8vh';
+  el.style.fontSize = (12 + Math.random()*26) + 'px';
+  el.style.opacity = 0.8;
+  el.style.pointerEvents='none';
   el.textContent = rainEmojis[Math.floor(Math.random()*rainEmojis.length)];
   emojiLayer.appendChild(el);
-
-  const duration = 6000 + Math.random()*6000;
-  el.animate([
-    { transform: `translateY(0px) rotate(${Math.random()*30-15}deg)`, opacity: el.style.opacity },
-    { transform: `translateY(${window.innerHeight + 120}px) rotate(${Math.random()*360-180}deg)`, opacity: 0.2 }
-  ], { duration, easing: 'linear' });
-
-  setTimeout(()=> el.remove(), duration + 50);
+  const dur = 6000 + Math.random()*7000;
+  el.animate([{ transform:'translateY(0)' , opacity:1 }, { transform:`translateY(${window.innerHeight + 100}px)`, opacity:0.25 }], { duration:dur, easing:'linear' });
+  setTimeout(()=> { try{ el.remove() }catch(e){} }, dur+80);
 }
-const rainInterval = setInterval(createEmoji, 420);
+setInterval(createEmoji, 520);
 
-/* --------------
-   Step 1 -> Step 2
-   -------------- */
-startBtn.addEventListener('click', async () => {
-  // Play music on user interaction (required by browsers)
-  try { bgMusic.volume = 0.45; await bgMusic.play(); } catch(e){ /* autoplay blocked */ }
+/* -------------- start music segment helper -------------- */
+async function startMusicSegment() {
+  if(userInteracted) return;
+  userInteracted = true;
+  try { bgMusic.currentTime = startTime; bgMusic.volume = 0.45; await bgMusic.play(); musicPlaying = true; } catch(e) { /* blocked */ }
+  musicInterval = setInterval(() => {
+    if(bgMusic.currentTime >= endTime){
+      bgMusic.pause();
+      musicPlaying = false;
+      clearInterval(musicInterval);
+    }
+  }, 300);
+}
 
-  // transition
-  step1.style.display = 'none';
-  step2.style.display = 'flex';
-  initBalloons();
+/* mute toggle */
+muteBtn.addEventListener('click', ()=>{
+  if(bgMusic.muted){ bgMusic.muted=false; muteBtn.textContent='🔈'; } else { bgMusic.muted=true; muteBtn.textContent='🔇'; }
 });
 
-/* --------------
-   Balloons
-   -------------- */
+/* -------------- Stage transitions -------------- */
+startBtn.addEventListener('click', async () => {
+  await startMusicSegment();
+  // transition to roses
+  step1.style.display='none';
+  step2.style.display='flex';
+  initRoses();
+});
+
+/* -------------- Roses (balloons) -------------- */
 let poppedCount = 0;
-function initBalloons(){
+function initRoses(){
   balloonStage.innerHTML = '';
   poppedCount = 0;
-
-  // produce random positions for N balloons
-  const N = Math.min(balloonMessages.length, 7);
-  const colors = ['#ffb6d5','#ffd8a8','#bfeccb','#c7d2ff','#ffd1f6','#fff1a8','#fcd5ff'];
-
+  const N = Math.min(roseMessages.length, 7);
+  const colors = ['#ffb6d5','#ffd1a8','#bfeccb','#c7d2ff','#ffd1f6','#fff1a8','#fcd5ff'];
   for(let i=0;i<N;i++){
-    const b = document.createElement('div');
-    b.className = 'balloon';
-    b.style.background = colors[i % colors.length];
+    const r = document.createElement('div');
+    r.className='rose';
+    r.style.background = `radial-gradient(circle at 40% 30%, #fff8f9, ${colors[i%colors.length]})`;
+    const left = 6 + Math.random()*88;
+    const top = 8 + Math.random()*66;
+    r.style.left = left + '%';
+    r.style.top = top + '%';
+    r.dataset.idx = i;
 
-    // random position within stage
-    const left = 8 + Math.random()*84;
-    const top  = 12 + Math.random()*48;
-    b.style.left = left + '%';
-    b.style.top  = top + '%';
-
-    // small pin on top (click this to pop)
     const pin = document.createElement('div');
-    pin.className = 'pin';
-    pin.title = 'Pop';
-    pin.textContent = '📌';
-    pin.style.cursor = 'pointer';
+    pin.className='pin'; pin.textContent='📌';
+    pin.addEventListener('click',(ev)=>{ ev.stopPropagation(); popRose(r); });
 
-    // hidden index
-    b.dataset.idx = i;
+    const s = document.createElement('div'); s.className='string';
+    r.appendChild(pin); r.appendChild(s);
 
-    // string
-    const s = document.createElement('div');
-    s.className = 'string';
-
-    // pop handler (pin click)
-    pin.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      popBalloon(b);
-    });
-
-    // also allow touch anywhere on balloon to pop
-    b.addEventListener('click', ()=> popBalloon(b));
-
-    b.appendChild(pin);
-    b.appendChild(s);
-    balloonStage.appendChild(b);
+    r.addEventListener('click', ()=> popRose(r));
+    balloonStage.appendChild(r);
   }
 }
 
-function popBalloon(b){
-  if(!b || b.classList.contains('popped')) return;
-  b.classList.add('popped');
-  b.classList.add('balloon-pop');
-  // play pop sound if available
-  try { popSound.currentTime = 0; popSound.volume = 0.7; popSound.play(); } catch(e){}
-  // show associated message
-  const idx = parseInt(b.dataset.idx) || 0;
-  balloonMsg.textContent = balloonMessages[idx % balloonMessages.length];
-
+function popRose(r){
+  if(!r || r.classList.contains('popped')) return;
+  r.classList.add('popped');
+  r.classList.add('rose-pop');
+  try { popSound.currentTime = 0; popSound.volume = 0.75; popSound.play(); } catch(e){}
+  const idx = parseInt(r.dataset.idx) || 0;
+  balloonMsg.textContent = roseMessages[idx % roseMessages.length];
   poppedCount++;
-  setTimeout(()=> {
-    try { b.remove(); } catch(e){}
-    if(poppedCount >= balloonMessages.length){
-      // all done -> show continue to video button
-      setTimeout(()=> {
-        // show video overlay automatically
-        openVideoOverlay();
-      }, 700);
+  setTimeout(()=> { try{ r.remove() } catch(e){}; 
+    if(poppedCount >= roseMessages.length){
+      // all popped -> open video after small delay
+      setTimeout(()=> openVideoOverlay(), 700);
     }
   }, 420);
 }
 
-/* Skip button (if they don't want balloons) */
+/* skip to video */
 skipToVideoBtn.addEventListener('click', openVideoOverlay);
 
-/* --------------
-   Video overlay
-   -------------- */
+/* -------------- video overlay -------------- */
 function openVideoOverlay(){
   videoOverlay.classList.add('active');
   videoOverlay.setAttribute('aria-hidden','false');
-  // autoplay video if allowed
+  // pause music while video plays
+  try { if(!bgMusic.paused){ bgMusic.pause(); } } catch(e){}
   try { sorryVideo.currentTime = 0; sorryVideo.play().catch(()=>{}); } catch(e){}
 }
-closeVideo.addEventListener('click', closeVideoOverlay);
-continueAfterVideo.addEventListener('click', ()=> {
+closeVideo.addEventListener('click', ()=> {
   closeVideoOverlay();
-  // go to final dialog stage
-  step2.style.display = 'none';
-  step4.style.display = 'flex';
+  // after closing continue to final dialog
+  step2.style.display='none';
+  step4.style.display='flex';
 });
 
-/* When video ends -> proceed automatically */
-sorryVideo.addEventListener('ended', () => {
-  // after video ends, move to cartoon stage
+continueAfterVideo.addEventListener('click', ()=> {
   closeVideoOverlay();
-  step2.style.display = 'none';
-  step4.style.display = 'flex';
+  step2.style.display='none';
+  step4.style.display='flex';
 });
 
 function closeVideoOverlay(){
   videoOverlay.classList.remove('active');
   videoOverlay.setAttribute('aria-hidden','true');
   try { sorryVideo.pause(); } catch(e){}
+  // resume music segment if still within range
+  try {
+    if(userInteracted && !bgMusic.paused && bgMusic.currentTime < endTime) { /* already playing */ }
+    else if(userInteracted && bgMusic.currentTime < endTime) {
+      bgMusic.play().catch(()=>{});
+    } else if(userInteracted && bgMusic.currentTime >= endTime) {
+      // do nothing; segment finished
+    } else {
+      // not started
+    }
+  } catch(e){}
 }
 
-/* --------------
-   Dialog (final)
-   -------------- */
+/* when video plays: ensure bgMusic pauses */
+sorryVideo.addEventListener('play', ()=> {
+  try { if(!bgMusic.paused) bgMusic.pause(); } catch(e){}
+});
+sorryVideo.addEventListener('ended', ()=> {
+  // resume music segment after video if within endTime
+  try { if(bgMusic.currentTime < endTime){ bgMusic.play().catch(()=>{}); } } catch(e){}
+  // after video end go to cartoon
+  videoOverlay.classList.remove('active');
+  step2.style.display='none';
+  step4.style.display='flex';
+});
+
+/* -------------- cartoon dialog -------------- */
 let dialogIndex = 0;
-dialogNextBtn.addEventListener('click', () => {
+dialogNextBtn.addEventListener('click', ()=>{
   if(dialogIndex < finalDialogues.length){
     dialogBox.textContent = finalDialogues[dialogIndex];
     dialogIndex++;
   } else {
-    // finished -> show final screen
-    step4.style.display = 'none';
-    step5.style.display = 'flex';
-    // optionally fade music down
+    // finished -> show final
+    step4.style.display='none';
+    step5.style.display='flex';
+    // fade music out gently
     fadeOutMusic();
   }
 });
 
 /* restart */
-restartBtn.addEventListener('click', ()=> {
-  // reset
+restartBtn.addEventListener('click', ()=>{
+  // reset all states
   dialogIndex = 0;
-  balloonMsg.textContent = 'Pop balloons to read messages 💌';
-  step5.style.display = 'none';
-  step1.style.display = 'flex';
-  // reset video
-  sorryVideo.currentTime = 0;
-  // restart music if paused
-  try { bgMusic.currentTime = 0; bgMusic.play().catch(()=>{}); } catch(e){}
+  poppedCount = 0;
+  balloonMsg.textContent = 'Pop a rose — each pop has a sorry line 💌';
+  step5.style.display='none';
+  step1.style.display='flex';
+  // stop video
+  try{ sorryVideo.pause(); sorryVideo.currentTime = 0; } catch(e){}
+  // reset music segment so user must click again to play segment (browser rules)
+  try{ bgMusic.pause(); bgMusic.currentTime = startTime; userInteracted = false; } catch(e){}
 });
 
-/* small helper: fade out music */
+/* fade out helper */
 function fadeOutMusic(){
-  if(!bgMusic) return;
-  const vol = bgMusic.volume;
-  const steps = 12;
-  let i = 0;
-  const id = setInterval(()=> {
-    i++;
-    const newv = Math.max(0, vol * (1 - i/steps));
-    bgMusic.volume = newv;
-    if(i >= steps){ clearInterval(id); bgMusic.pause(); bgMusic.volume = vol; }
-  }, 120);
+  try{
+    const vol = bgMusic.volume || 0.45;
+    const steps = 14; let i=0;
+    const id = setInterval(()=> {
+      i++; bgMusic.volume = Math.max(0, vol * (1 - i/steps));
+      if(i>=steps){ clearInterval(id); try{ bgMusic.pause(); bgMusic.volume = vol; }catch(e){} }
+    }, 140);
+  } catch(e){}
 }
 
-/* Accessibility: on small screens adjust layout */
-window.addEventListener('resize', ()=> {
-  // nothing special required — layout is responsive by CSS
-});
+/* -------------- click on body to start music segment if user prefers (single click) -------------- */
+document.body.addEventListener('click', async function initOnce(){
+  // If the user already clicked the startBtn (which calls startMusicSegment) this is ok — we won't override.
+  if(userInteracted) return;
+  // We don't auto-start music here — start occurs on pressing Continue Apologize to respect flow.
+  // But we set userInteracted true when they click anywhere first time to allow play on next calls (defensive)
+  userInteracted = true;
+  document.body.removeEventListener('click', initOnce);
+}, { once:true });
 
-/* keep emoji rain running forever (created earlier) */
-/* end of script */
+/* -------------- small accessibility: set canvas size on load -------------- */
+window.addEventListener('load', ()=> { resizeCanvas(); makeDrops(); });
+
 </script>
 </body>
 </html>
